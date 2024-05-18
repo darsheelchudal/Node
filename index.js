@@ -1,35 +1,42 @@
-const http = require("http");
+import express from "express";
+import users from "./MOCK_DATA.json" assert { type: "json" };
 
-const fs = require("fs");
-const url = require("url");
+const app = express();
+const PORT = 8000;
 
-const myServer = http.createServer((req, res) => {
-  if (req.url === "/favicon.ico") return res.end();
-  const log = `${Date.now()}: ${req.method} : ${
-    req.url
-  } New request recieved\n`;
-  const myUrl = url.parse(req.url, true);
-  console.log(myUrl);
-  fs.appendFile("log.txt", log, (err, data) => {
-    switch (myUrl.pathname) {
-      case "/":
-        res.end("Homepage");
-        break;
-      case "/about":
-        const username = myUrl.query.myname;
-        res.end(`Hi !!,${username}`);
-        break;
-      case "/search":
-        const search = myUrl.query.search_query;
-        res.end(`Here are your results for ${search} `);
-        break;
-      default:
-        res.end("404 Not Found");
-        break;
-    }
-  });
+app.use(express.urlencoded({ extended: false }));
+//Routes
+//html  render
+app.get("/users", (req, res) => {
+  const html = `
+  <ul>
+  ${users.map((user) => `<li>${user.first_name}</li>`).join("")}
+  </ul>
+ `;
+  res.send(html);
+});
+//REST API
+app.get("/api/users", (req, res) => {
+  return res.json(users);
 });
 
-myServer.listen(8000, () => {
-  console.log("Server started");
+app.get("/api/users/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const user = users.find((user) => user.id === id);
+  return res.json(user);
 });
+
+//Post
+app.post("/api/users", (req, res) => {
+  const body = req.body;
+  c 
+  return res.json({ status: "pending" });
+});
+app.patch("/api/users/:id", (req, res) => {
+  return res.json({ status: "pending" });
+});
+app.delete("/api/users/:id", (req, res) => {
+  return res.json({ status: "pending" });
+});
+
+app.listen(PORT, () => console.log(`Server started at PORT: ${PORT}`));
