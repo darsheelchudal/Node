@@ -4,7 +4,17 @@ import users from "./MOCK_DATA.json" assert { type: "json" };
 const app = express();
 const PORT = 8000;
 
+//Middlewares
 app.use(express.urlencoded({ extended: false }));
+app.use((req, res, next) => {
+  console.log("Hello from middleware 1");
+  req.myUsername = "Darsheel";
+  next();
+});
+app.use((req, res, next) => {
+  console.log("Hello from middleware 2", req.myUsername);
+  next();
+});
 //Routes
 //html  render
 app.get("/users", (req, res) => {
@@ -17,6 +27,7 @@ app.get("/users", (req, res) => {
 });
 //REST API
 app.get("/api/users", (req, res) => {
+  console.log("I am in get route", req.myUsername);
   return res.json(users);
 });
 
