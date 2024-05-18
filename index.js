@@ -29,7 +29,7 @@ app.get("/api/users/:id", (req, res) => {
 //Post
 app.post("/api/users", (req, res) => {
   const body = req.body;
-  c 
+
   return res.json({ status: "pending" });
 });
 app.patch("/api/users/:id", (req, res) => {
